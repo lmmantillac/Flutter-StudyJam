@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:clase2/pokedetail.dart';
 
@@ -5,8 +8,7 @@ void main() => runApp(MaterialApp(
   title: 'Poke App',
   home: HomePage(),
   debugShowCheckedModeBanner: false,
-)
-);
+) );
 
 class HomePage extends StatefulWidget{
   @override
@@ -16,51 +18,89 @@ class HomePage extends StatefulWidget{
 }
 
 class HomePageState extends State<HomePage> {
+  var url = "https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json";
+  PokeHub pokeHub;
+
   @override
   void initState() {
     super.initState();
+    fetchData();
+  }
+
+  fetchData()async{
+    var res = await http.get(url);
+    var decodedJson = jsonDecode(res.body);
+    pokeHub = PokeHub.fromJson(decodedJson);
+    print(pokeHub.toJson());
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('PokeApp'),
-        backgroundColor: Colors.greenAccent,
-        centerTitle: true,
-      ),
+        appBar: AppBar(title: Text('PokeApp'),
+          backgroundColor: Colors.greenAccent,
+          centerTitle: true,
+        ),
 
-      body: GridView.count(
+
+
+      //body: pokeHub == null? Center(child: CircularProgressIndicator(),)
+
+      body: pokeHub == null
+          ? Center(
+        child: CircularProgressIndicator(),
+      )
+          : GridView.count(
         crossAxisCount: 2,
-
-        children: <Widget>[
-          Padding(padding: const EdgeInsets.all(2.0),
-            child: InkWell(
-              highlightColor: Colors.greenAccent,
-              splashColor: Colors.greenAccent,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            PokeDetail(
-                              //pokemon: poke,
-                            )));
-              },
-
+        children: pokeHub.pokemon
+            .map((poke) => Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PokeDetail(
+                        //pokemon: poke,
+                      )));
+            },
+            child: Hero(
+              tag: poke.img,
+              child: Card(
+                child: Column(
+                  mainAxisAlignment:
+                  MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                      height: 100.0,
+                      width: 100.0,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(poke.img))),
+                    ),
+                    Text(
+                      poke.name,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
-
-
           ),
-
-        ],
-
-
-
-        //drawer: Drawer(),
-
+        ))
+            .toList(),
       ),
 
+    drawer: Drawer(),
+
+      floatingActionButton: FloatingActionButton(onPressed: (){},
+                            backgroundColor: Colors.cyan,
+                            child:Icon(Icons.refresh)
+      ),
     );
   }
-
 }
