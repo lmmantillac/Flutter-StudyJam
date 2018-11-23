@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:clase2/pokedetail.dart';
+import 'package:pokemonadventure/pokedetail.dart';
+import 'package:pokemonadventure/pokemon.dart';
 
 void main() => runApp(MaterialApp(
   title: 'Poke App',
@@ -38,10 +38,10 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('PokeApp'),
-          backgroundColor: Colors.greenAccent,
-          centerTitle: true,
-        ),
+      appBar: AppBar(title: Text('PokeApp'),
+        backgroundColor: Colors.greenAccent,
+        centerTitle: true,
+      ),
 
 
 
@@ -95,11 +95,11 @@ class HomePageState extends State<HomePage> {
             .toList(),
       ),
 
-    drawer: Drawer(),
+      drawer: Drawer(),
 
       floatingActionButton: FloatingActionButton(onPressed: (){},
-                            backgroundColor: Colors.cyan,
-                            child:Icon(Icons.refresh)
+          backgroundColor: Colors.cyan,
+          child:Icon(Icons.refresh)
       ),
     );
   }
