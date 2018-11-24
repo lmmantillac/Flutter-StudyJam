@@ -1,16 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:clase2/pokemon.dart';
-import 'package:clase2/pokedetail.dart';
+import 'package:pokemonadventure/pokemon.dart';
+import 'package:pokemonadventure/pokedetail.dart';
 
 void main() => runApp(MaterialApp(
-  title: 'Poke App',
+  title: "Poke App",
   home: HomePage(),
   debugShowCheckedModeBanner: false,
-) );
+));
 
-class HomePage extends StatefulWidget{
+class HomePage extends StatefulWidget {
   @override
   HomePageState createState() {
     return new HomePageState();
@@ -18,16 +18,19 @@ class HomePage extends StatefulWidget{
 }
 
 class HomePageState extends State<HomePage> {
-  var url = "https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json";
+  var url =
+      "https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json";
+
   PokeHub pokeHub;
 
   @override
   void initState() {
     super.initState();
+
     fetchData();
   }
 
-  fetchData()async{
+  fetchData() async {
     var res = await http.get(url);
     var decodedJson = jsonDecode(res.body);
     pokeHub = PokeHub.fromJson(decodedJson);
@@ -38,15 +41,10 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('PokeApp'),
-          backgroundColor: Colors.greenAccent,
-          centerTitle: true,
-        ),
-
-
-
-      //body: pokeHub == null? Center(child: CircularProgressIndicator(),)
-
+      appBar: AppBar(
+        title: Text("Poke App"),
+        backgroundColor: Colors.cyan,
+      ),
       body: pokeHub == null
           ? Center(
         child: CircularProgressIndicator(),
@@ -62,7 +60,7 @@ class HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => PokeDetail(
-                        //pokemon: poke,
+                        pokemon: poke,
                       )));
             },
             child: Hero(
@@ -94,12 +92,11 @@ class HomePageState extends State<HomePage> {
         ))
             .toList(),
       ),
-
-    drawer: Drawer(),
-
-      floatingActionButton: FloatingActionButton(onPressed: (){},
-                            backgroundColor: Colors.cyan,
-                            child:Icon(Icons.refresh)
+      drawer: Drawer(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.cyan,
+        child: Icon(Icons.refresh),
       ),
     );
   }
